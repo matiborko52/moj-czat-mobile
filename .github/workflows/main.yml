@@ -1,11 +1,21 @@
 name: Build Flet APK
-on: [push, workflow_dispatch] # Buduje przy każdym wrzuceniu kodu lub ręcznie
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List files (Debug)
+        run: ls -R  # Sprawdzimy, czy plik .py na pewno tam jest
+
+      - name: Setup Java (Potrzebne do Androida)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -24,7 +34,7 @@ jobs:
         run: flet build apk czat_mobile.py
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: build/apk/app-release.apk
+          name: MojCzat-Mobile
+          path: build/apk/*.apk
